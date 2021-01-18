@@ -1,0 +1,207 @@
+// ============================================================================
+// =                          OUTER WALL BORDER                               =
+// ============================================================================
+int nn = 5;
+cout << "  Number of outer wall nodes = "<< nn << endl;
+//
+//  Read the X and Y coordinates.
+//
+real[int] Gxx = [0.0, 100.0, 100.0, 0.0, 0.0];
+real[int] Gyy = [0.0, 0.0, 100.0, 100.0, 0.0];
+
+//
+//  List the nodes.
+//
+cout << "\n";
+cout << "  Outer wall nodes:\n";
+cout << "\n";
+for ( int i = 0; i < nn; i++ )
+{
+  cout << "  " << i
+       << "  " << Gxx[i]
+       << "  " << Gyy[i] << endl;
+}
+//
+//  Create the corresponding border.
+//
+int bx = 1;
+
+border GsupOuter ( t = 0, nn - 1 )
+{
+  int i = min ( int ( t ), Gxx.n - 2 );
+  real t1 = t - i;
+  x = Gxx[i] * ( 1.0 - ( t - i ) ) + Gxx[i+1] * ( t - i );
+  y = Gyy[i] * ( 1.0 - ( t - i ) ) + Gyy[i+1] * ( t - i );
+  label = 1;
+}
+
+
+// ============================================================================
+// =                          INNER WALL BORDER                               =
+// ============================================================================
+//
+//  Read the number of points.
+//
+int nn2 = 5;
+
+//
+//  Read the X and Y coordinates.
+//
+real[int] Gxx2 = [5.0,95.0,95.0,5.0,5.0];
+real[int] Gyy2 = [5.0,5.0,95.0,95.0,5.0];
+
+//
+//  List the nodes.
+//
+cout << "\n";
+cout << "  Inner wall nodes:\n";
+cout << "\n";
+for ( int i = 0; i < nn2; i++ )
+{
+  cout << "  " << i
+       << "  " << Gxx2[i]
+       << "  " << Gyy2[i] << endl;
+}
+//
+//  Create the corresponding border.
+//
+int bx2 = 1;
+
+border GsupInner ( t = 0, nn2 - 1 )
+{
+  int i = min ( int ( t ), Gxx2.n - 2 );
+  real t1 = t - i;
+  x = Gxx2[i] * ( 1.0 - ( t - i ) ) + Gxx2[i+1] * ( t - i );
+  y = Gyy2[i] * ( 1.0 - ( t - i ) ) + Gyy2[i+1] * ( t - i );
+  label = 2;
+}
+
+// ============================================================================
+// =                          WIFFI BOX BORDER                                =
+// ============================================================================
+//
+//  Read the number of points.
+//
+int nn3 = 13;
+
+//
+//  Read the X and Y coordinates.
+//
+real[int] Gxx3 = [20,80,80,55,55,70,70,30,30,45,45,20,20];
+real[int] Gyy3 = [20,20,80,80,70,70,30,30,70,70,80,80,20];
+
+//
+//  List the nodes.
+//
+cout << "\n";
+cout << "  Boundary nodes:\n";
+cout << "\n";
+for ( int i = 0; i < nn3; i++ )
+{
+  cout << "  " << i
+       << "  " << Gxx3[i]
+       << "  " << Gyy3[i] << endl;
+}
+//
+//  Create the corresponding border.
+//
+
+
+border GsupBox ( t = 0, nn3 - 1 )
+{
+  int i = min ( int ( t ), Gxx3.n - 2 );
+  real t1 = t - i;
+  x = Gxx3[i] * ( 1.0 - ( t - i ) ) + Gxx3[i+1] * ( t - i );
+  y = Gyy3[i] * ( 1.0 - ( t - i ) ) + Gyy3[i+1] * ( t - i );
+  label = 3;
+}
+
+
+// ============================================================================
+// =                              WIFI HOTSPOT                                =
+// ============================================================================
+border C(t=0, 2*pi){x=50+cos(t); y=bx*50+sin(t); label=4;}
+
+
+// ============================================================================
+// =                              CRETE THE MESH                              =
+// ============================================================================
+mesh Th = buildmesh (GsupOuter( nn * 300 ) + GsupInner( nn * 300 ) + GsupBox( nn * 300 ) + C(300) );
+plot ( Th, wait = 1, ps = "mesh_points_mesh.ps", cmm = "mesh_points mesh" );
+
+
+
+
+// ============================================================================
+// =                              WALL FUNCTION                               =
+// ============================================================================
+func real wall() {
+   // Check if x, y in region A
+   if((x >= 0 && x <= 5) && (y >= 0 && y <= 100)){
+    return 1;
+  }
+  // Check if x, y in region B
+  if((x >= 0 && x <= 100) && (y >= 0 && y <= 5)){
+   return 1;
+ }
+ // Check if x, y in region C
+ if((x >= 95 && x <= 100) && (y >= 0 && y <= 100)){
+  return 1;
+}
+// Check if x, y in region D
+if((x >= 0 && x <= 100) && (y >= 95 && y <= 100)){
+ return 1;
+}
+// Check if x, y in region E
+if((x >= 20 && x <= 30) && (y >= 20 && y <= 80)){
+ return 1;
+}
+// Check if x, y in region F
+if((x >= 20 && x <= 80) && (y >= 20 && y <= 30)){
+ return 1;
+}
+// Check if x, y in region G
+if((x >= 70 && x <= 80) && (y >= 20 && y <= 80)){
+ return 1;
+}
+// Check if x, y in region H
+if((x >= 55 && x <= 80) && (y >= 70 && y <= 80)){
+ return 1;
+}
+// Check if x, y in region I
+if((x >= 20 && x <= 45) && (y >= 70 && y <= 80)){
+ return 1;
+}
+  return 0;
+}
+
+
+// ============================================================================
+// =                              SOLVE PROBLEM                               =
+// ============================================================================
+//
+//  Solve a problem on this mesh.
+//
+//  Define the finite element space.
+//
+fespace Vh(Th, P1);
+
+Vh<complex> v,w;
+
+randinit(900);
+Vh wallreflexion = randreal1();
+Vh<complex> wallabsorption = randreal1()*0.5i;
+Vh k = 6;
+
+
+problem muwave(v,w) =
+    int2d(Th)(
+          (v*w*k^2)/(1+(wallreflexion+wallabsorption)*wall())^2
+        - (dx(v)*dx(w)+dy(v)*dy(w))
+    )
+    + on(4, v=1)
+    ;
+
+muwave;
+Vh vm = log(real(v)^2 + imag(v)^2);
+plot(vm, wait=1, fill=true, value=0, nbiso=65);
