@@ -1,7 +1,7 @@
 ---
-author: Marcos Severt Silva
-date: Diciembre 2020
-title: "Propagación del WiFi: Reflexión, Dispersión y Difracción"
+Author: Marcos Severt Silva
+Date: December 2020
+title: "WiFi Propagation: Reflection, Scattering and Diffraction"
 ---
 
 # Introduction
@@ -34,7 +34,7 @@ Maxwell's fourth and final equation is based on Ampere's law which postulates th
 
 In the case of WiFi waves, we do not have to take time into account since, since the period of the signal is so short, the quality of the signal will not change with time. Since these are then stationary solutions, we can simplify Maxwell's equations into a single equation known as the Helmholtz Equation
 
-# Caso Base, piso sin obstáculos
+# Base Case
 
 Para este primer caso de estudio he creado ,mediante el uso de una serie
 de coordenadas, un supuesto plano de una vivienda sin obstáculos con una
@@ -79,7 +79,7 @@ Cabe destacar que, a pesar de que en la habitación de la derecha ahora
 hay una mejor cobertura, la habitación del medio se ve perjudicada por
 la cancelación de ondas.
 
-# Caso con obstáculos
+# Obstacles case
 
 Para este segundo caso de estudio he creado ,mediante el uso de una
 serie decoordenadas, un supuesto plano de una vivienda con obstáculos
@@ -111,7 +111,7 @@ Y ahora el resultado de la simulación sería el siguiente:
 ![image](Obstaculos2f2.PNG)
 :::
 
-# Caso de la difracción
+# Diffraction case
 
 La ecuación de Helmholtz también modela el comportamiento de las ondas
 respecto al fenómeno de la difracción, es por ello que para este caso he
