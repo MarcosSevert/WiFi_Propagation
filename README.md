@@ -1,7 +1,7 @@
 ---
 Author: Marcos Severt Silva
 Date: December 2020
-title: "WiFi Propagation: Reflection, Scattering and Diffraction"
+Title: "WiFi Propagation: Reflection, Scattering and Diffraction"
 ---
 
 # Introduction
